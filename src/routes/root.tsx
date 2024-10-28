@@ -2,7 +2,6 @@ import { AppSidebar } from "#/app-sidebar";
 import { SiteHeader } from "#/site/Header";
 import { TailwindIndicator } from "#/site/TailwindIndicator";
 import { SidebarProvider } from "#/ui/sidebar";
-import { DevTools } from "jotai-devtools";
 import { Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
 
@@ -25,7 +24,7 @@ export default function Root() {
         <Toaster />
       </SidebarProvider>
 
-      <DevTools />
+      {/* <DevTools /> */}
     </>
   );
 }

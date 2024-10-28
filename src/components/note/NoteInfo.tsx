@@ -7,7 +7,7 @@ export default function NoteInfo() {
   const note = useAtomValue(currentNote);
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 !ml-0 md:ml-3">
       <NoteTitle note={note} />
 
       <span className="flex lg:gap-10 sm:gap-5 gap-3">
@@ -52,7 +52,7 @@ function NoteCreatedAt({ note }: NoteProps) {
   const formatedDateDiff = intlFormatDistance(createdAt, new Date());
 
   return (
-    <span className="text-muted-foreground space-x-2 text-sm">
+    <span className="text-muted-foreground space-x-2 text-sm hidden sm:block">
       Created {formatedDateDiff}
     </span>
   );

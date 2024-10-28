@@ -141,10 +141,10 @@ function SidebarNote({ note }: NoteProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="start">
           <DropdownMenuItem>
-            <span>Rename</span>
+            <span>Delete</span>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <span>Delete</span>
+            <span>View info</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
