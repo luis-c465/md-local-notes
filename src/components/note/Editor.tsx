@@ -10,7 +10,6 @@ import {
   frontmatterPlugin,
   headingsPlugin,
   imagePlugin,
-  KitchenSinkToolbar,
   linkDialogPlugin,
   linkPlugin,
   listsPlugin,
@@ -22,10 +21,13 @@ import {
   thematicBreakPlugin,
   toolbarPlugin,
 } from "@mdxeditor/editor";
+import { useSetAtom } from "jotai";
 import { debounce } from "lodash-es";
-import { useCallback, useLayoutEffect, useRef } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
+import { currentNote as currentNoteAtom } from "~/atom";
 import { saveNote } from "~/lib/storage";
 import { Note } from "~/lib/types";
+import Toolbar from "./Toolbar";
 
 const codeBlockLanguages: Record<string, string> = languages.reduce(
   (obj, lang) => {
@@ -38,7 +40,10 @@ const codeBlockLanguages: Record<string, string> = languages.reduce(
 codeBlockLanguages["txt"] = "text";
 
 const allPlugins = (diffMarkdown: string) => [
-  toolbarPlugin({ toolbarContents: () => <KitchenSinkToolbar /> }),
+  toolbarPlugin({
+    toolbarContents: () => <Toolbar />,
+    toolbarClassName: "flex flex-wrap",
+  }),
   listsPlugin(),
   quotePlugin(),
   headingsPlugin(),
@@ -56,10 +61,10 @@ const allPlugins = (diffMarkdown: string) => [
       tsx: "TypeScript",
       jsx: "Javascript",
       html: "HTML",
-      css: "css",
+      css: "CSS",
       json: "JSON",
       md: "Markdown",
-      python: "python",
+      python: "Python",
       go: "Golang",
       java: "Java",
       rust: "Rust",
@@ -84,11 +89,21 @@ type Props = {
 };
 export default function Editor({ note }: Props) {
   const ref = useRef<MDXEditorMethods>(null);
+  const setCurrentNote = useSetAtom(currentNoteAtom);
+
+  useEffect(() => {
+    setCurrentNote(note);
+  }, [note]);
 
   const saveMarkdown = useCallback(
     debounce((markdown: string) => {
-      note["content"] = markdown;
-      saveNote(note);
+      const copy: Note = {
+        ...note,
+        content: markdown,
+        updatedAt: new Date(),
+      };
+      saveNote(copy);
+      setCurrentNote(copy);
     }, 250),
     [note],
   );
@@ -102,14 +117,13 @@ export default function Editor({ note }: Props) {
   }, [note.content]);
 
   return (
-    <div>
-      <MDXEditor
-        ref={ref}
-        markdown={note.content}
-        contentEditableClassName="prose max-w-full font-sans"
-        plugins={allPlugins(note.content)}
-        onChange={saveMarkdown}
-      />
-    </div>
+    <MDXEditor
+      className="w-full"
+      ref={ref}
+      markdown={note.content}
+      contentEditableClassName="prose max-w-full font-sans"
+      plugins={allPlugins(note.content)}
+      onChange={saveMarkdown}
+    />
   );
 }

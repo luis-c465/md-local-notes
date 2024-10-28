@@ -113,7 +113,7 @@ function NotesGroup({ groupedNote: { name, notes } }: NotesGroupProps) {
       <SidebarGroupContent>
         <SidebarMenu>
           {notes.map((note) => (
-            <SidebarNote key={note.title} note={note} />
+            <SidebarNote key={note.id} note={note} />
           ))}
         </SidebarMenu>
       </SidebarGroupContent>
