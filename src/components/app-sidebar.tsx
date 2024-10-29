@@ -1,15 +1,9 @@
-import * as React from "react";
 import { Link } from "react-router-dom";
 
 import AddNewNote from "#/note/AddNew";
+import SidebarNote from "#/note/SidebarNote";
 import { SearchForm } from "#/search-form";
 import { Icons } from "#/site/icons";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "#/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -19,54 +13,13 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarRail,
 } from "#/ui/sidebar";
 import { atom, useAtomValue } from "jotai";
-import { MoreHorizontal } from "lucide-react";
-import { currentNote, notesAtom } from "~/atom";
+import { notesAtom } from "~/atom";
 import siteConfig from "~/config/site";
 import { GroupedNotes, groupNotesByDate } from "~/lib/note";
-import { Note } from "~/lib/types";
 
-// This is sample data.
-// const data = {
-//   navMain: [
-//     {
-//       title: "Getting Started",
-//       url: "#",
-//       items: [
-//         {
-//           title: "Installation",
-//           url: "#",
-//         },
-//         {
-//           title: "Project Structure",
-//           url: "#",
-//         },
-//       ],
-//     },
-//     {
-//       title: "Building Your Application",
-//       url: "#",
-//       items: [
-//         {
-//           title: "Routing",
-//           url: "#",
-//         },
-//         {
-//           title: "Data Fetching",
-//           url: "#",
-//           isActive: true,
-//         },
-//       ],
-//     },
-//   ],
-// };
-
-const currentNoteIdAtom = atom((get) => get(currentNote)?.id ?? -1);
 const groupedNotesAtom = atom((get) => {
   const notes = get(notesAtom);
   return groupNotesByDate(notes);
@@ -118,36 +71,5 @@ function NotesGroup({ groupedNote: { name, notes } }: NotesGroupProps) {
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
-  );
-}
-
-type NoteProps = {
-  note: Note;
-};
-function SidebarNote({ note }: NoteProps) {
-  const currentNoteId = useAtomValue(currentNoteIdAtom);
-
-  return (
-    <SidebarMenuItem>
-      <SidebarMenuButton asChild isActive={currentNoteId === note.id}>
-        <Link to={`/note/${note.id}`}>{note.title}</Link>
-      </SidebarMenuButton>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <SidebarMenuAction>
-            <MoreHorizontal />
-          </SidebarMenuAction>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent side="right" align="start">
-          <DropdownMenuItem>
-            <span>Delete</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <span>View info</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </SidebarMenuItem>
   );
 }
