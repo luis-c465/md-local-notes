@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const noteSchema = z.object({
   id: z.number(),
-  title: z.string().min(3).max(100),
+  title: z.string().max(100),
   content: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),

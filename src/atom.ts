@@ -18,7 +18,6 @@ export const notesAtom = atom(
   (get) => {
     const ids = get(noteIdsAtom);
     const entries = ids.map((id) => [id, memoizedNoteToAtom(id)]);
-    console.dir(ids);
     return Object.fromEntries(entries) as Notes;
   },
   (_get, set, notes: Notes) => {

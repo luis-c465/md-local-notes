@@ -14,32 +14,19 @@ import {
 import {
   atom,
   createStore,
-  getDefaultStore,
   Provider,
   useAtom,
   useAtomValue,
   useSetAtom,
-  useStore,
 } from "jotai";
+import { useHydrateAtoms } from "jotai/utils";
 import { CheckIcon, MoreHorizontalIcon } from "lucide-react";
 import { createContext, useCallback, useContext, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { currentNoteAtom, NoteAtom, store as defaultStore } from "~/atom";
+import { currentNoteAtom, store as defaultStore, NoteAtom } from "~/atom";
 import { Note } from "~/lib/types";
 
 const editModeAtom = atom(false);
-// const updateSidebarTitleAtom = atom(null, (get, set) => {
-//   const note = get(sidebarNoteAtom);
-//   const title = get(editedNoteNameAtom);
-//   const newNote = {
-//     ...note,
-//     title,
-//   };
-
-//   set(sidebarNoteAtom, newNote);
-//   saveNote(newNote);
-//   set(editModeAtom, false);
-// });
 const editedNoteNameAtom = atom("");
 
 type SidebarNoteProps = {
@@ -83,12 +70,12 @@ function Menu() {
 }
 
 function MenuButton() {
-  const sidebarNote = useSidebarAtomValue()
+  const sidebarNote = useSidebarAtomValue();
 
-  const currentNoteId = useAtomValue(currentNoteIdAtom);
-
-  const sidebarStore = useStore();
-  const editMode = useAtomValue(editModeAtom, { store: sidebarStore });
+  const currentNoteId = useAtomValue(currentNoteIdAtom, {
+    store: defaultStore,
+  });
+  const editMode = useAtomValue(editModeAtom);
 
   const isActive = useMemo(
     () => currentNoteId === sidebarNote?.id,
@@ -103,8 +90,7 @@ function MenuButton() {
 }
 
 function Action() {
-  const sidebarStore = useStore();
-  const editMode = useAtomValue(editModeAtom, { store: sidebarStore });
+  const editMode = useAtomValue(editModeAtom);
 
   if (editMode) {
     return <SubmitNameAction />;
@@ -137,15 +123,13 @@ function NoteActions() {
 }
 
 function SubmitNameAction() {
-  const defaultStore = getDefaultStore();
   const sidebarAtom = useSidebarAtom();
   const [sidebarNote, setSidebarNoteAtom] = useAtom(sidebarAtom, {
     store: defaultStore,
   });
 
-  const sidebarStore = useStore();
-  const title = useAtomValue(editedNoteNameAtom, { store: sidebarStore });
-  const setEditModeAtom = useSetAtom(editModeAtom, { store: sidebarStore });
+  const title = useAtomValue(editedNoteNameAtom);
+  const setEditModeAtom = useSetAtom(editModeAtom);
 
   const updateSidebarTitle = useCallback(() => {
     const newNote: Note = {
@@ -165,8 +149,7 @@ function SubmitNameAction() {
 }
 
 function RenameAction() {
-  const sidebarStore = useStore();
-  const setEditMode = useSetAtom(editModeAtom, { store: sidebarStore });
+  const setEditMode = useSetAtom(editModeAtom);
 
   return (
     <DropdownMenuItem onClick={() => setEditMode(true)}>
@@ -176,8 +159,7 @@ function RenameAction() {
 }
 
 function NoteLink() {
-  const sidebarAtom = useSidebarAtom();
-  const note = useAtomValue(sidebarAtom)!;
+  const note = useSidebarAtomValue();
 
   return (
     <Link className="w-full h-full py-2" to={`/note/${note.id}`}>
@@ -187,10 +169,10 @@ function NoteLink() {
 }
 
 function NoteName() {
-  const sidebarAtom = useSidebarAtom();
-  const note = useAtomValue(sidebarAtom)!;
-
+  const note = useSidebarAtomValue();
   const setEditedNoteName = useSetAtom(editedNoteNameAtom);
+
+  useHydrateAtoms([[editedNoteNameAtom, note.title]]);
 
   return (
     <Input
