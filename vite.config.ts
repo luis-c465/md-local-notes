@@ -1,5 +1,4 @@
 import react from "@vitejs/plugin-react";
-// @ts-expect-error path
 import path from "path";
 import { defineConfig } from "vite";
 
@@ -19,9 +18,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      // @ts-expect-error path
       "~": path.resolve(__dirname, "./src"),
-      // @ts-expect-error path
       "#": path.resolve(__dirname, "./src/components"),
     },
   },

@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "#/ui/popover";
 import { useAtomValue } from "jotai";
 import { PencilIcon } from "lucide-react";
 import { useCallback, useState } from "react";
-import { currentNote as currentNoteAtom } from "~/atom";
+import { currentNoteAtom } from "~/atom";
 import { saveNote } from "~/lib/storage";
 import { Note } from "~/lib/types";
 

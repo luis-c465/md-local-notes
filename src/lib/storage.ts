@@ -1,8 +1,9 @@
-import { range } from "lodash-es";
+import type { SyncStorage } from "jotai/vanilla/utils/atomWithStorage";
+import { z } from "zod";
 import { stringToNote } from "./schema";
-import { Note, OptionalNote } from "./types";
+import { Note } from "./types";
 
-export function getNote(id: number) {
+export function getNote(id: string) {
   const fromStorage = localStorage.getItem(`note-${id}`);
   if (fromStorage === null) return null;
 
@@ -18,18 +19,110 @@ export function saveNote(note: Note) {
   localStorage.setItem(`note-${note.id}`, JSON.stringify(note));
 }
 
-export function getAllNotes(): OptionalNote[] {
-  const numNotes = localStorage.getItem("num-notes");
-  if (!numNotes) return [];
+export const noteStorage: SyncStorage<Note | null> = {
+  getItem(key, initialValue) {
+    const storedValue = localStorage.getItem(key);
+    if (!storedValue) {
+      this.setItem(key, initialValue);
+      return initialValue;
+    }
 
-  const parsedNumNotes = parseInt(numNotes, 10);
-  if (isNaN(parsedNumNotes)) {
-    console.error(`Invalid number of notes: ${numNotes}`);
-    localStorage.setItem("num-notes", "0");
-    return [];
-  }
+    try {
+      return stringToNote.parse(storedValue ?? "");
+    } catch {
+      return null;
+    }
+  },
+  setItem(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  },
+  removeItem(key) {
+    localStorage.removeItem(key);
+  },
+  subscribe(key, callback, initialValue) {
+    if (
+      typeof window === "undefined" ||
+      typeof window.addEventListener === "undefined"
+    ) {
+      return () => {};
+    }
 
-  const notes = range(1, parsedNumNotes + 1).map(getNote);
-  console.log(notes);
-  return notes;
-}
+    const handler = (e: StorageEvent) => {
+      if (e.storageArea === localStorage && e.key === key) {
+        let newValue;
+        try {
+          newValue = stringToNote.parse(e.newValue ?? "");
+        } catch {
+          newValue = initialValue;
+        }
+        callback(newValue);
+      }
+    };
+    window.addEventListener("storage", handler);
+
+    return () => window.removeEventListener("storage", handler);
+  },
+};
+
+const noteIdsSchema = z.array(z.coerce.number().int().nonnegative());
+export const noteIdsStorage: SyncStorage<number[]> = {
+  getItem(key, initialValue) {
+    const storedValue = localStorage.getItem(key);
+    if (!storedValue) {
+      this.setItem(key, initialValue);
+      return initialValue;
+    }
+
+    try {
+      return noteIdsSchema.parse(JSON.parse(storedValue ?? ""));
+    } catch (e) {
+      console.error(e);
+      return initialValue;
+    }
+  },
+  setItem(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  },
+  removeItem(key) {
+    localStorage.removeItem(key);
+  },
+  subscribe(key, callback, initialValue) {
+    if (
+      typeof window === "undefined" ||
+      typeof window.addEventListener === "undefined"
+    ) {
+      return () => {};
+    }
+
+    const handler = (e: StorageEvent) => {
+      if (e.storageArea === localStorage && e.key === key) {
+        let newValue;
+        try {
+          newValue = noteIdsSchema.parse(JSON.parse(e.newValue ?? ""));
+        } catch {
+          newValue = initialValue;
+        }
+        callback(newValue);
+      }
+    };
+    window.addEventListener("storage", handler);
+
+    return () => window.removeEventListener("storage", handler);
+  },
+};
+
+// export function getAllNotes(): OptionalNote[] {
+//   const numNotes = localStorage.getItem("num-notes");
+//   if (!numNotes) return [];
+
+//   const parsedNumNotes = parseInt(numNotes, 10);
+//   if (isNaN(parsedNumNotes)) {
+//     console.error(`Invalid number of notes: ${numNotes}`);
+//     localStorage.setItem("num-notes", "0");
+//     return [];
+//   }
+
+//   const notes = range(0, parsedNumNotes).map(getNote);
+//   console.log(notes);
+//   return notes;
+// }

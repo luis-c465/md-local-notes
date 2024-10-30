@@ -1,40 +1,33 @@
 import Editor from "#/note/Editor";
-import { useLoaderData } from "react-router-dom";
-import { getNote } from "~/lib/storage";
-import { Note, Params } from "~/lib/types";
+import { useSetAtom } from "jotai";
+import { useHydrateAtoms } from "jotai/utils";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { currentNoteIdAtom } from "~/atom";
 
 type LoaderParams = {
   noteId?: string;
 };
-type LoaderData = {
-  note: Note | null;
-};
-export function noteLoader({ params }: Params<LoaderParams>): LoaderData {
-  if (!params.noteId) {
-    return {
-      note: null,
-    };
-  }
-
-  const parsedId = parseInt(params.noteId, 10);
-  if (!Number.isInteger(parsedId))
-    return {
-      note: null,
-    };
-  const note = getNote(parsedId);
-  return { note };
-}
 
 export default function NoteRoute() {
-  const { note } = useLoaderData() as LoaderData;
-
-  if (!note) {
+  const setCurrentNoteId = useSetAtom(currentNoteIdAtom);
+  const { noteId } = useParams<LoaderParams>();
+  if (!noteId) {
     return null;
   }
 
+  const id = parseInt(noteId, 10);
+  if (!Number.isInteger(id)) return null;
+
+  useEffect(() => {
+    setCurrentNoteId(id);
+  }, [id]);
+
+  useHydrateAtoms([[currentNoteIdAtom, id]]);
+
   return (
     <div className="col flex gap-5">
-      <Editor note={note} />
+      <Editor />
     </div>
   );
 }

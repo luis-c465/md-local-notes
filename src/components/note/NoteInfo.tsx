@@ -1,10 +1,12 @@
 import { intlFormatDistance } from "date-fns";
 import { useAtomValue } from "jotai";
-import { currentNote } from "~/atom";
+import { currentNoteAtom } from "~/atom";
 import { OptionalNote } from "~/lib/types";
 
 export default function NoteInfo() {
-  const note = useAtomValue(currentNote);
+  const note = useAtomValue(currentNoteAtom);
+
+  if (note === null) return null;
 
   return (
     <div className="flex flex-col gap-1 !ml-0 md:ml-3">

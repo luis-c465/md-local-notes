@@ -1,17 +1,24 @@
 import { Button } from "#/ui/button";
-import { useSetAtom } from "jotai";
+import { atom, useSetAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
-import { addNewNotesAtom } from "~/atom";
+import { addNewNotesAtom, noteIdsAtom } from "~/atom";
 import { Note } from "~/lib/types";
+
+const getLastIdAtom = atom(null, (get, _set) => {
+  const ids = get(noteIdsAtom);
+
+  if (ids.length === 0) return -1;
+  return ids[ids.length - 1];
+});
 
 export default function AddNewNote() {
   const navigate = useNavigate();
   const addNewNote = useSetAtom(addNewNotesAtom);
+  const getLastId = useSetAtom(getLastIdAtom);
 
   const onClick = () => {
-    const numNotes = localStorage.getItem("num-notes") ?? 0;
-    const newId = Number(numNotes) + 1;
-    localStorage.setItem("num-notes", newId.toString());
+    // The last id + 1
+    const newId = getLastId() + 1;
 
     const newNote: Note = {
       id: newId,
@@ -21,7 +28,7 @@ export default function AddNewNote() {
       updatedAt: new Date(),
     };
 
-    localStorage.setItem(`note-${newId}`, JSON.stringify(newNote));
+    // localStorage.setItem(`note-${newId}`, JSON.stringify(newNote));
     addNewNote(newNote);
 
     navigate(`/note/${newId}`, {

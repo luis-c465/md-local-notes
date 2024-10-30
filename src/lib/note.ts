@@ -7,7 +7,7 @@ type DateRange = {
 };
 
 const today = new Date();
-const dateRanges: DateRange[] = [
+export const dateRanges: DateRange[] = [
   {
     name: "Today",
     end: endOfDay(today),
@@ -25,35 +25,3 @@ const dateRanges: DateRange[] = [
     end: fromUnixTime(0),
   },
 ];
-
-export type GroupedNotes = {
-  name: string;
-  notes: Note[];
-};
-
-/**
- * Groups a list of notes by their update dates.
- */
-export function groupNotesByDate(notes: OptionalNote[]): GroupedNotes[] {
-  console.log("Grouping notes by date", notes);
-
-  const groups: GroupedNotes[] = dateRanges.map(({ name }) => ({
-    name,
-    notes: [],
-  }));
-
-  for (const note of notes) {
-    if (!note) continue;
-
-    for (let i = 0; i < dateRanges.length; i++) {
-      const { end } = dateRanges[i];
-
-      if (note.updatedAt <= end) {
-        groups[i].notes.push(note);
-        break; // Stop checking other date ranges once a match is found
-      }
-    }
-  }
-
-  return groups;
-}

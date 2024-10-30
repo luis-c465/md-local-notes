@@ -26,6 +26,9 @@ importers:
       '@radix-ui/react-label':
         specifier: ^2.1.0
         version: 2.1.0(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-popover':
+        specifier: ^1.1.2
+        version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-separator':
         specifier: ^1.1.0
         version: 1.1.0(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -43,7 +46,7 @@ importers:
         version: 4.17.12
       '@vitejs/plugin-react':
         specifier: ^4.3.3
-        version: 4.3.3(vite@5.4.10)
+        version: 4.3.3(vite@5.4.10(@types/node@22.8.4))
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -90,33 +93,9 @@ importers:
         specifier: ^0.8.3
         version: 0.8.3(typescript@5.6.3)(zod@3.23.8)
     devDependencies:
-      '@lexical/clipboard':
-        specifier: ^0.17.1
-        version: 0.17.1
-      '@lexical/link':
-        specifier: ^0.17.1
-        version: 0.17.1
-      '@lexical/list':
-        specifier: ^0.17.1
-        version: 0.17.1
-      '@lexical/markdown':
-        specifier: ^0.17.1
-        version: 0.17.1
-      '@lexical/plain-text':
-        specifier: ^0.17.1
-        version: 0.17.1
-      '@lexical/react':
-        specifier: ^0.17.1
-        version: 0.17.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.20)
-      '@lexical/rich-text':
-        specifier: ^0.17.1
-        version: 0.17.1
-      '@lexical/selection':
-        specifier: ^0.17.1
-        version: 0.17.1
-      '@lexical/utils':
-        specifier: ^0.17.1
-        version: 0.17.1
+      '@types/node':
+        specifier: ^22.8.4
+        version: 22.8.4
       '@types/react':
         specifier: ^18.3.12
         version: 18.3.12
@@ -132,9 +111,6 @@ importers:
       globals:
         specifier: ^15.11.0
         version: 15.11.0
-      lexical:
-        specifier: ^0.17.1
-        version: 0.17.1
       postcss:
         specifier: ^8.4.47
         version: 8.4.47
@@ -146,10 +122,10 @@ importers:
         version: 5.6.3
       vite:
         specifier: ^5.4.9
-        version: 5.4.10
+        version: 5.4.10(@types/node@22.8.4)
       vite-tsconfig-paths:
         specifier: ^5.0.1
-        version: 5.0.1(typescript@5.6.3)(vite@5.4.10)
+        version: 5.0.1(typescript@5.6.3)(vite@5.4.10(@types/node@22.8.4))
 
 packages:
 
@@ -1282,6 +1258,9 @@ packages:
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
 
+  '@types/node@22.8.4':
+    resolution: {integrity: sha512-SpNNxkftTJOPk0oN+y2bIqurEXHTA2AOZ3EJDDKeJ5VzkvvORSvmQXGQarcOzWV1ac7DCaPBEdMDxBsM+d8jWw==}
+
   '@types/prop-types@15.7.13':
     resolution: {integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==}
 
@@ -2387,6 +2366,9 @@ packages:
     resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  undici-types@6.19.8:
+    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
 
   unidiff@1.0.4:
     resolution: {integrity: sha512-ynU0vsAXw0ir8roa+xPCUHmnJ5goc5BTM2Kuc3IJd8UwgaeRs7VSD5+eeaQL+xp1JtB92hu/Zy/Lgy7RZcr1pQ==}
@@ -3983,6 +3965,10 @@ snapshots:
 
   '@types/ms@0.7.34': {}
 
+  '@types/node@22.8.4':
+    dependencies:
+      undici-types: 6.19.8
+
   '@types/prop-types@15.7.13': {}
 
   '@types/react-dom@18.3.1':
@@ -3998,14 +3984,14 @@ snapshots:
 
   '@types/unist@3.0.3': {}
 
-  '@vitejs/plugin-react@4.3.3(vite@5.4.10)':
+  '@vitejs/plugin-react@4.3.3(vite@5.4.10(@types/node@22.8.4))':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.0)
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.0)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.4.10
+      vite: 5.4.10(@types/node@22.8.4)
     transitivePeerDependencies:
       - supports-color
 
@@ -5320,6 +5306,8 @@ snapshots:
 
   typescript@5.6.3: {}
 
+  undici-types@6.19.8: {}
+
   unidiff@1.0.4:
     dependencies:
       diff: 5.2.0
@@ -5392,23 +5380,24 @@ snapshots:
       '@types/unist': 3.0.3
       unist-util-stringify-position: 4.0.0
 
-  vite-tsconfig-paths@5.0.1(typescript@5.6.3)(vite@5.4.10):
+  vite-tsconfig-paths@5.0.1(typescript@5.6.3)(vite@5.4.10(@types/node@22.8.4)):
     dependencies:
       debug: 4.3.7
       globrex: 0.1.2
       tsconfck: 3.1.4(typescript@5.6.3)
     optionalDependencies:
-      vite: 5.4.10
+      vite: 5.4.10(@types/node@22.8.4)
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  vite@5.4.10:
+  vite@5.4.10(@types/node@22.8.4):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.47
       rollup: 4.24.2
     optionalDependencies:
+      '@types/node': 22.8.4
       fsevents: 2.3.3
 
   w3c-keyname@2.2.8: {}

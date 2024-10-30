@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "~/routes/root";
 import "./index.css";
-import NoteRoute, { noteLoader } from "./routes/note";
+import NoteRoute from "./routes/note";
 
 const router = createBrowserRouter([
   {
@@ -13,7 +13,6 @@ const router = createBrowserRouter([
       {
         path: "note/:noteId",
         element: <NoteRoute />,
-        loader: noteLoader,
       },
     ],
   },

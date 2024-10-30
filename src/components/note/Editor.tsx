@@ -21,10 +21,10 @@ import {
   thematicBreakPlugin,
   toolbarPlugin,
 } from "@mdxeditor/editor";
-import { useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { debounce } from "lodash-es";
-import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
-import { currentNote as currentNoteAtom } from "~/atom";
+import { useCallback, useLayoutEffect, useRef } from "react";
+import { currentNoteAtom } from "~/atom";
 import { saveNote } from "~/lib/storage";
 import { Note } from "~/lib/types";
 import Toolbar from "./Toolbar";
@@ -84,19 +84,14 @@ const allPlugins = (diffMarkdown: string) => [
   markdownShortcutPlugin(),
 ];
 
-type Props = {
-  note: Note;
-};
-export default function Editor({ note }: Props) {
+export default function Editor() {
   const ref = useRef<MDXEditorMethods>(null);
-  const setCurrentNote = useSetAtom(currentNoteAtom);
-
-  useEffect(() => {
-    setCurrentNote(note);
-  }, [note]);
+  const [note, setCurrentNote] = useAtom(currentNoteAtom);
 
   const saveMarkdown = useCallback(
     debounce((markdown: string) => {
+      if (!note) return;
+
       const copy: Note = {
         ...note,
         content: markdown,
@@ -110,11 +105,13 @@ export default function Editor({ note }: Props) {
 
   // Update the editor when the note changes
   useLayoutEffect(() => {
-    if (ref.current) {
+    if (ref.current && note?.content) {
       ref.current.focus();
       ref.current.setMarkdown(note.content);
     }
-  }, [note.content]);
+  }, [note?.content]);
+
+  if (!note) return null;
 
   return (
     <MDXEditor
