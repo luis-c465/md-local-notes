@@ -1,7 +1,7 @@
 import { atom, getDefaultStore, PrimitiveAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { memoize } from "lodash-es";
-import { noteIdsStorage, noteStorage, saveNote } from "./lib/storage";
+import { noteIdsStorage, noteStorage } from "./lib/storage";
 import { Note } from "./lib/types";
 
 export type NullableNoteAtom = PrimitiveAtom<Note | null>;
@@ -43,23 +43,26 @@ export const currentNoteAtom = atom(
     if (!Object.hasOwn(notes, id)) return null;
 
     const current = notes[id];
+
     return get(current);
   },
   (get, set, newNote: Note) => {
     const oldNotes = get(notesAtom);
-    const copy = { ...oldNotes };
     const id = get(currentNoteIdAtom);
-    copy[id] = noteToAtom(newNote);
+    const noteAtom = oldNotes[id];
 
-    set(notesAtom, copy);
-    saveNote(newNote);
+    set(noteAtom, newNote);
   },
 );
 
 function noteIdToAtom(id: number, defaultNote?: Note): NullableNoteAtom {
-  return atomWithStorage(`note-${id}`, defaultNote ?? null, noteStorage, {
+  const atom = atomWithStorage(`note-${id}`, defaultNote ?? null, noteStorage, {
     getOnInit: true,
   });
+
+  atom.debugLabel = `note-${id}`;
+
+  return atom;
 }
 
 export function noteToAtom(note: Note) {

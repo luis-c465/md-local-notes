@@ -25,9 +25,5 @@ export default function NoteRoute() {
 
   useHydrateAtoms([[currentNoteIdAtom, id]]);
 
-  return (
-    <div className="col flex gap-5">
-      <Editor />
-    </div>
-  );
+  return <Editor />;
 }

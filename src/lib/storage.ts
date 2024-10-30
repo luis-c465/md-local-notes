@@ -110,19 +110,3 @@ export const noteIdsStorage: SyncStorage<number[]> = {
     return () => window.removeEventListener("storage", handler);
   },
 };
-
-// export function getAllNotes(): OptionalNote[] {
-//   const numNotes = localStorage.getItem("num-notes");
-//   if (!numNotes) return [];
-
-//   const parsedNumNotes = parseInt(numNotes, 10);
-//   if (isNaN(parsedNumNotes)) {
-//     console.error(`Invalid number of notes: ${numNotes}`);
-//     localStorage.setItem("num-notes", "0");
-//     return [];
-//   }
-
-//   const notes = range(0, parsedNumNotes).map(getNote);
-//   console.log(notes);
-//   return notes;
-// }

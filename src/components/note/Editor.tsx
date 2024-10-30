@@ -25,8 +25,8 @@ import { useAtom } from "jotai";
 import { debounce } from "lodash-es";
 import { useCallback, useLayoutEffect, useRef } from "react";
 import { currentNoteAtom } from "~/atom";
-import { saveNote } from "~/lib/storage";
 import { Note } from "~/lib/types";
+import { def } from "~/lib/utils";
 import Toolbar from "./Toolbar";
 
 const codeBlockLanguages: Record<string, string> = languages.reduce(
@@ -97,7 +97,6 @@ export default function Editor() {
         content: markdown,
         updatedAt: new Date(),
       };
-      saveNote(copy);
       setCurrentNote(copy);
     }, 250),
     [note],
@@ -105,17 +104,17 @@ export default function Editor() {
 
   // Update the editor when the note changes
   useLayoutEffect(() => {
-    if (ref.current && note?.content) {
+    if (ref.current && def(note?.content)) {
       ref.current.focus();
       ref.current.setMarkdown(note.content);
     }
-  }, [note?.content]);
+  }, [note?.id]);
 
   if (!note) return null;
 
   return (
     <MDXEditor
-      className="w-full"
+      className="w-full h-full"
       ref={ref}
       markdown={note.content}
       contentEditableClassName="prose max-w-full font-sans"
