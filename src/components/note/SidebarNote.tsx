@@ -25,6 +25,7 @@ import { createContext, useCallback, useContext, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { currentNoteAtom, store as defaultStore, NoteAtom } from "~/atom";
 import { Note } from "~/lib/types";
+import InfoPopup from "./InfoPopup";
 
 const editModeAtom = atom(false);
 const editedNoteNameAtom = atom("");
@@ -114,9 +115,8 @@ function NoteActions() {
         <DropdownMenuItem>
           <span>Delete</span>
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <span>View info</span>
-        </DropdownMenuItem>
+
+        <InfoPopup />
       </DropdownMenuContent>
     </DropdownMenu>
   );

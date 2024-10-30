@@ -1,4 +1,4 @@
-import NoteInfo from "#/note/NoteInfo";
+import NoteInfoHeader from "#/note/InfoHeader";
 import { Icons } from "#/site/icons";
 import { ThemeToggle } from "#/site/ThemeToggle";
 import { buttonVariants } from "#/ui/button";
@@ -13,7 +13,7 @@ export function SiteHeader() {
           <SidebarCollapse />
         </div>
 
-        <NoteInfo />
+        <NoteInfoHeader />
 
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">

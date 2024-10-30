@@ -3,7 +3,7 @@ import { useAtomValue } from "jotai";
 import { currentNoteAtom } from "~/atom";
 import { OptionalNote } from "~/lib/types";
 
-export default function NoteInfo() {
+export default function NoteInfoHeader() {
   const note = useAtomValue(currentNoteAtom);
 
   if (note === null) return null;
