@@ -1,3 +1,4 @@
+import { filteredNotesAtom } from "#/search-form";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -5,7 +6,7 @@ import {
   SidebarMenu,
 } from "#/ui/sidebar";
 import { atom, useAtomValue } from "jotai";
-import { NoteAtom, notesAtom } from "~/atom";
+import { NoteAtom } from "~/atom";
 import { dateRanges } from "~/lib/note";
 import SidebarNote from "./Note";
 
@@ -15,7 +16,7 @@ export type GroupedNotes = {
 };
 
 export const groupedNotesAtom = atom<GroupedNotes[]>((get) => {
-  const notesObj = get(notesAtom);
+  const notesObj = get(filteredNotesAtom);
 
   const atoms = Object.values(notesObj);
 

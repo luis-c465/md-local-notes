@@ -29,6 +29,11 @@ export const notesAtom = atom(
   },
 );
 
+export const notesListAtom = atom<NullableNoteAtom[]>((get) => {
+  const notes = get(notesAtom);
+  return Object.values(notes);
+});
+
 export const addNewNotesAtom = atom(null, (get, set, note: Note) => {
   const notes = get(notesAtom);
   set(notesAtom, {
