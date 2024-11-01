@@ -1,6 +1,5 @@
 import NoteInfoHeader from "#/note/InfoHeader";
 import { Icons } from "#/site/icons";
-import { ThemeToggle } from "#/site/ThemeToggle";
 import { buttonVariants } from "#/ui/button";
 import SidebarCollapse from "#/ui/sidebar-collapse";
 import siteConfig from "~/config/site";
@@ -28,8 +27,6 @@ export function SiteHeader() {
                 <span className="sr-only">GitHub</span>
               </div>
             </a>
-
-            <ThemeToggle />
           </nav>
         </div>
       </div>

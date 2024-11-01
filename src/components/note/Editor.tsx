@@ -39,51 +39,6 @@ const codeBlockLanguages: Record<string, string> = languages.reduce(
 );
 codeBlockLanguages["txt"] = "text";
 
-const allPlugins = (diffMarkdown: string) => [
-  toolbarPlugin({
-    toolbarContents: () => <Toolbar />,
-    toolbarClassName: "flex flex-wrap",
-  }),
-  listsPlugin(),
-  quotePlugin(),
-  headingsPlugin(),
-  linkPlugin(),
-  linkDialogPlugin(),
-  // eslint-disable-next-line @typescript-eslint/require-await
-  imagePlugin({ imageUploadHandler: async () => "/sample-image.png" }),
-  tablePlugin(),
-  thematicBreakPlugin(),
-  frontmatterPlugin(),
-  codeBlockPlugin({ defaultCodeBlockLanguage: "txt" }),
-  codeMirrorPlugin({
-    codeBlockLanguages: {
-      txt: "Text",
-      tsx: "TypeScript",
-      jsx: "Javascript",
-      html: "HTML",
-      css: "CSS",
-      json: "JSON",
-      md: "Markdown",
-      python: "Python",
-      go: "Golang",
-      java: "Java",
-      rust: "Rust",
-      c: "C",
-      "C++": "C++",
-      PHP: "PHP",
-      SQL: "SQL",
-      YAML: "Yaml",
-      Dockerfile: "Dockerfile",
-      Shell: "Bash",
-      LaTex: "LaTex",
-    },
-    // codeBlockLanguages,
-  }),
-  directivesPlugin({ directiveDescriptors: [AdmonitionDirectiveDescriptor] }),
-  diffSourcePlugin({ viewMode: "rich-text", diffMarkdown }),
-  markdownShortcutPlugin(),
-];
-
 export default function Editor() {
   const ref = useRef<MDXEditorMethods>(null);
   const [note, setCurrentNote] = useAtom(currentNoteAtom);
@@ -124,4 +79,64 @@ export default function Editor() {
       onChange={saveMarkdown}
     />
   );
+}
+
+/**
+ * Handles "uploading" an image, returns the base64 encoded image data
+ */
+async function imageUploadHandler(image: File): Promise<string> {
+  const reader = new FileReader();
+  return new Promise((resolve, reject) => {
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+
+    reader.readAsDataURL(image);
+  });
+}
+
+function allPlugins(diffMarkdown: string) {
+  return [
+    toolbarPlugin({
+      toolbarContents: () => <Toolbar />,
+      toolbarClassName: "flex flex-wrap",
+    }),
+    listsPlugin(),
+    quotePlugin(),
+    headingsPlugin(),
+    linkPlugin(),
+    linkDialogPlugin(),
+    // eslint-disable-next-line @typescript-eslint/require-await
+    imagePlugin({ imageUploadHandler }),
+    tablePlugin(),
+    thematicBreakPlugin(),
+    frontmatterPlugin(),
+    codeBlockPlugin({ defaultCodeBlockLanguage: "txt" }),
+    codeMirrorPlugin({
+      codeBlockLanguages: {
+        txt: "Text",
+        tsx: "TypeScript",
+        jsx: "Javascript",
+        html: "HTML",
+        css: "CSS",
+        json: "JSON",
+        md: "Markdown",
+        python: "Python",
+        go: "Golang",
+        java: "Java",
+        rust: "Rust",
+        c: "C",
+        "C++": "C++",
+        PHP: "PHP",
+        SQL: "SQL",
+        YAML: "Yaml",
+        Dockerfile: "Dockerfile",
+        Shell: "Bash",
+        LaTex: "LaTex",
+      },
+      // codeBlockLanguages,
+    }),
+    directivesPlugin({ directiveDescriptors: [AdmonitionDirectiveDescriptor] }),
+    diffSourcePlugin({ viewMode: "rich-text", diffMarkdown }),
+    markdownShortcutPlugin(),
+  ];
 }

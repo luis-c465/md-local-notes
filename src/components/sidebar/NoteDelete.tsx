@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "#/ui/dialog";
 import { DropdownMenuItem } from "#/ui/dropdown-menu";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { RESET } from "jotai/utils";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -49,7 +49,7 @@ export default function NoteDeleteAction() {
 function DeleteBtn() {
   const sidebarAtom = useSidebarAtom();
   const [sidebarNote, setSidebarAtom] = useAtom(sidebarAtom, { store });
-  const [currentId, setCurrentId] = useAtom(currentNoteIdAtom, { store });
+  const currentId = useAtomValue(currentNoteIdAtom, { store });
   const [noteIds, setNoteIds] = useAtom(noteIdsAtom, { store });
 
   const navigate = useNavigate();
