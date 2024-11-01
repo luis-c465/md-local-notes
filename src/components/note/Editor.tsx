@@ -23,7 +23,7 @@ import {
 } from "@mdxeditor/editor";
 import { useAtom } from "jotai";
 import { debounce } from "lodash-es";
-import { useCallback, useLayoutEffect, useRef } from "react";
+import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
 import { currentNoteAtom } from "~/atom";
 import { Note } from "~/lib/types";
 import { def } from "~/lib/utils";
@@ -88,6 +88,8 @@ export default function Editor() {
   const ref = useRef<MDXEditorMethods>(null);
   const [note, setCurrentNote] = useAtom(currentNoteAtom);
 
+  const initialContent = useMemo(() => note?.content ?? "", [note?.id]);
+
   const saveMarkdown = useCallback(
     debounce((markdown: string) => {
       if (!note) return;
@@ -116,9 +118,9 @@ export default function Editor() {
     <MDXEditor
       className="w-full h-full"
       ref={ref}
-      markdown={note.content}
+      markdown={note?.content ?? ""}
       contentEditableClassName="prose max-w-full font-sans"
-      plugins={allPlugins(note.content)}
+      plugins={allPlugins(initialContent)}
       onChange={saveMarkdown}
     />
   );

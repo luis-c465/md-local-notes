@@ -1,4 +1,5 @@
 import { Button } from "#/ui/button";
+import { useSidebar } from "#/ui/sidebar";
 import { atom, useSetAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
 import { addNewNotesAtom, noteIdsAtom } from "~/atom";
@@ -15,6 +16,7 @@ export default function AddNewNote() {
   const navigate = useNavigate();
   const addNewNote = useSetAtom(addNewNotesAtom);
   const getLastId = useSetAtom(getLastIdAtom);
+  const { openMobile, setOpenMobile } = useSidebar();
 
   const onClick = () => {
     // The last id + 1
@@ -35,6 +37,8 @@ export default function AddNewNote() {
       replace: true,
       flushSync: false,
     });
+
+    if (openMobile) setOpenMobile(false);
   };
 
   return (

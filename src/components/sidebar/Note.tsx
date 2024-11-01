@@ -10,6 +10,7 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "#/ui/sidebar";
 import {
   atom,
@@ -25,7 +26,8 @@ import { createContext, useCallback, useContext, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { currentNoteAtom, store as defaultStore, NoteAtom } from "~/atom";
 import { Note } from "~/lib/types";
-import InfoPopup from "./InfoPopup";
+import NoteDeleteAction from "./NoteDelete";
+import InfoPopupAction from "./NoteInfoPopup";
 
 const editModeAtom = atom(false);
 const editedNoteNameAtom = atom("");
@@ -37,7 +39,7 @@ type SidebarNoteProps = {
 const currentNoteIdAtom = atom((get) => get(currentNoteAtom)?.id ?? -1);
 
 const NoteAtomContext = createContext<NoteAtom | null>(null);
-function useSidebarAtom() {
+export function useSidebarAtom() {
   return useContext(NoteAtomContext)!;
 }
 
@@ -112,11 +114,9 @@ function NoteActions() {
       <DropdownMenuContent side="right" align="start">
         <RenameAction />
 
-        <DropdownMenuItem>
-          <span>Delete</span>
-        </DropdownMenuItem>
+        <NoteDeleteAction />
 
-        <InfoPopup />
+        <InfoPopupAction />
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -160,9 +160,18 @@ function RenameAction() {
 
 function NoteLink() {
   const note = useSidebarAtomValue();
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const handleClick = useCallback(() => {
+    if (isMobile) setOpenMobile(false);
+  }, [isMobile]);
 
   return (
-    <Link className="w-full h-full py-2" to={`/note/${note.id}`}>
+    <Link
+      className="w-full h-full py-2"
+      to={`/note/${note.id}`}
+      onClick={handleClick}
+    >
       {note.title}
     </Link>
   );

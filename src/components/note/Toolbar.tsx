@@ -16,7 +16,6 @@ import {
   InsertThematicBreak,
   ListsToggle,
   Separator,
-  ShowSandpackInfo,
   StrikeThroughSupSubToggles,
   UndoRedo,
   type DirectiveNode,
@@ -46,44 +45,36 @@ export default function Toolbar() {
             contents: () => <ChangeCodeMirrorLanguage />,
           },
           {
-            when: (editor) => editor?.editorType === "sandpack",
-            contents: () => <ShowSandpackInfo />,
-          },
-          {
             fallback: () => (
               <div className="flex flex-wrap">
-                <div className="flex">
-                  <UndoRedo />
-                  <Separator />
+                <UndoRedo />
+                <Separator />
 
-                  <BoldItalicUnderlineToggles />
-                  <CodeToggle />
-
-                  <Separator />
-
-                  <StrikeThroughSupSubToggles />
-
-                  <ListsToggle />
-                </div>
+                <BoldItalicUnderlineToggles />
+                <CodeToggle />
 
                 <Separator />
 
-                <div className="flex">
-                  <ConditionalContents
-                    options={[
-                      {
-                        when: whenInAdmonition,
-                        contents: () => <ChangeAdmonitionType />,
-                      },
-                      { fallback: () => <BlockTypeSelect /> },
-                    ]}
-                  />
+                <StrikeThroughSupSubToggles />
 
-                  <Separator />
+                <ListsToggle />
 
-                  <CreateLink />
-                  <InsertImage />
-                </div>
+                <Separator />
+
+                <ConditionalContents
+                  options={[
+                    {
+                      when: whenInAdmonition,
+                      contents: () => <ChangeAdmonitionType />,
+                    },
+                    { fallback: () => <BlockTypeSelect /> },
+                  ]}
+                />
+
+                <Separator />
+
+                <CreateLink />
+                <InsertImage />
 
                 <Separator />
                 <div className="flex">

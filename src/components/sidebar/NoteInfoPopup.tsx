@@ -23,7 +23,7 @@ import { useAtomValue } from "jotai";
 import { currentNoteAtom, store } from "~/atom";
 import { countNonWhiteSpace, countWords } from "~/lib/word";
 
-export default function InfoPopup() {
+export default function InfoPopupAction() {
   return (
     <Dialog>
       <DialogTrigger asChild>

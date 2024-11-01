@@ -1,11 +1,13 @@
-import { atom, getDefaultStore, PrimitiveAtom } from "jotai";
+import { atom, getDefaultStore } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { memoize } from "lodash-es";
 import { noteIdsStorage, noteStorage } from "./lib/storage";
 import { Note } from "./lib/types";
 
-export type NullableNoteAtom = PrimitiveAtom<Note | null>;
-export type NoteAtom = PrimitiveAtom<Note>;
+type AtomWithStorage<T> = ReturnType<typeof atomWithStorage<T>>;
+export type NullableNoteAtom = AtomWithStorage<Note | null>;
+export type NoteAtom = AtomWithStorage<Note>;
+
 type Notes = Record<number, NullableNoteAtom>;
 
 export const store = getDefaultStore();
@@ -21,7 +23,8 @@ export const notesAtom = atom(
     return Object.fromEntries(entries) as Notes;
   },
   (_get, set, notes: Notes) => {
-    const keys = Object.keys(notes) as any as number[];
+    const keys = Object.keys(notes).map((key) => parseInt(key, 10));
+    console.log(keys);
     set(noteIdsAtom, keys);
   },
 );

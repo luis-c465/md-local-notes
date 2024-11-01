@@ -37,6 +37,7 @@ export const noteStorage: SyncStorage<Note | null> = {
     localStorage.setItem(key, JSON.stringify(value));
   },
   removeItem(key) {
+    console.log("remote", key);
     localStorage.removeItem(key);
   },
   subscribe(key, callback, initialValue) {
