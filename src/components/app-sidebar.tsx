@@ -1,8 +1,9 @@
+import favicon from "/public/favicion.svg";
+
 import { Link } from "react-router-dom";
 
 import AddNewNote from "#/note/AddNew";
 import { SearchForm } from "#/search-form";
-import { Icons } from "#/site/icons";
 import {
   Sidebar,
   SidebarContent,
@@ -18,7 +19,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar {...props}>
       <SidebarHeader>
         <Link to="/" className="flex items-center space-x-2">
-          <Icons.logo className="h-6 w-6 ml-2" />
+          <img src={favicon} alt="Favicon" className="h-6 w-6 ml-2" />
+
           <span className="inline-block font-bold">{siteConfig.name}</span>
         </Link>
 
