@@ -2,7 +2,7 @@ import { Button } from "#/ui/button";
 import { HomeIcon } from "lucide-react";
 import { useNavigate, useRouteError } from "react-router-dom";
 
-export default function ErrorPage() {
+export default function ErrorRoute() {
   const error = useRouteError();
 
   return (

@@ -22,7 +22,7 @@ import {
   toolbarPlugin,
 } from "@mdxeditor/editor";
 import { useAtom } from "jotai";
-import { debounce } from "lodash-es";
+import { throttle } from "lodash-es";
 import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
 import { currentNoteAtom } from "~/atom";
 import { Note } from "~/lib/types";
@@ -46,21 +46,27 @@ export default function Editor() {
   const initialContent = useMemo(() => note?.content ?? "", [note?.id]);
 
   const saveMarkdown = useCallback(
-    debounce((markdown: string) => {
-      if (!note) return;
+    throttle(
+      (markdown: string) => {
+        if (!note) return;
+        console.log("save", note);
 
-      const copy: Note = {
-        ...note,
-        content: markdown,
-        updatedAt: new Date(),
-      };
-      setCurrentNote(copy);
-    }, 250),
-    [note],
+        const copy: Note = {
+          ...note,
+          content: markdown,
+          updatedAt: new Date(),
+        };
+        setCurrentNote(copy);
+      },
+      2_500,
+      { trailing: true, leading: false },
+    ),
+    [note?.id],
   );
 
   // Update the editor when the note changes
   useLayoutEffect(() => {
+    console.log("useLayoutEffect", note);
     if (ref.current && def(note?.content)) {
       ref.current.focus();
       ref.current.setMarkdown(note.content);

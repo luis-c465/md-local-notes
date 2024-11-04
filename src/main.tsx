@@ -1,10 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import DefaultRoute from "~/routes/default";
+import ErrorRoute from "~/routes/error";
+import NoteRoute from "~/routes/note";
 import Root from "~/routes/root";
 import "./index.css";
-import ErrorPage from "./routes/error";
-import NoteRoute from "./routes/note";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,12 @@ const router = createBrowserRouter([
       {
         path: "note/:noteId",
         element: <NoteRoute />,
-        errorElement: <ErrorPage />,
+        errorElement: <ErrorRoute />,
+      },
+      {
+        path: "/",
+        element: <DefaultRoute />,
+        errorElement: <ErrorRoute />,
       },
     ],
   },
