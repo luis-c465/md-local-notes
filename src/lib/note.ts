@@ -1,5 +1,4 @@
 import { endOfDay, fromUnixTime, subDays, subWeeks } from "date-fns";
-import { Note, OptionalNote } from "./types";
 
 type DateRange = {
   name: string;
